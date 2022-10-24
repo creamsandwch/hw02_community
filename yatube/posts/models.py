@@ -1,9 +1,5 @@
-from datetime import datetime
-
 from django.contrib.auth import get_user_model
 from django.db import models
-
-# Create your models here.
 
 
 class Group(models.Model):
@@ -16,9 +12,13 @@ class Group(models.Model):
 
 
 class Post(models.Model):
-    text: str = models.TextField()
-    pub_date: datetime = models.DateTimeField(auto_now_add=True)
-    author: int = models.ForeignKey(
+    text = models.TextField()
+    pub_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-pub_date']
+
+    author = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
         related_name='posts',
@@ -27,5 +27,6 @@ class Post(models.Model):
         Group,
         blank=True,
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        related_name='groups',
     )
