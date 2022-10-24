@@ -1,11 +1,14 @@
 from django.shortcuts import render, get_object_or_404
-from yatube.settings import POSTS_VIEWED
+from django.conf import settings
 
 from .models import Post, Group
 
 
 def index(request):
-    posts = Post.objects.select_related('group', 'author')[:POSTS_VIEWED]
+    posts = Post.objects.select_related(
+        'group',
+        'author'
+    )[:settings.POSTS_VIEWED]
     context = {
         'posts': posts,
     }
@@ -14,7 +17,7 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = group.groups.all()[:POSTS_VIEWED]
+    posts = group.posts.all()[:settings.POSTS_VIEWED]
     context = {
         'group': group,
         'posts': posts,
