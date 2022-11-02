@@ -1,4 +1,5 @@
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, \
+    PasswordChangeDoneView
 from django.urls import path
 
 from . import views
@@ -14,7 +15,11 @@ urlpatterns = [
         ),
         name='logout'
     ),
-    path('signup/', views.SignUp.as_view(), name='signup'),
+    path(
+        'signup/',
+        views.SignUp.as_view(),
+        name='signup'
+    ),
     path(
         'login/',
         LoginView.as_view(
@@ -22,4 +27,38 @@ urlpatterns = [
         ),
         name='login'
     ),
+    path(
+        'password_change/',
+        views.PasswordChange.as_view(
+            template_name='users/password_change_form.html'
+        ),
+        name='password_change'
+    ),
+    path(
+        'password_change_done/',
+        PasswordChangeDoneView.as_view(
+            template_name='users/password_change_done.html'
+        ),
+        name='password_change_done'
+    ),
+    path(
+        'password_reset',
+        views.PasswordReset,
+        name='password_reset'
+    ),
+    path(
+        'password_reset_done',
+        views.PasswordResetDoneView,
+        name='password_reset_done'
+    ),
+    path(
+        'password_reset_complete',
+        views.PasswordResetComplete,
+        name='password_reset_complete'
+    ),
+    path(
+        'password_reset_confirm',
+        views.PasswordResetConfirm,
+        name='password_reset_confirm'
+    )
 ]
