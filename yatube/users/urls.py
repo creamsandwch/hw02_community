@@ -42,23 +42,24 @@ urlpatterns = [
         name='password_change_done'
     ),
     path(
-        'password_reset',
-        views.PasswordReset,
+        'password_reset/',
+        views.PasswordReset.as_view(),
         name='password_reset'
     ),
+
     path(
-        'password_reset_done',
-        views.PasswordResetDoneView,
-        name='password_reset_done'
-    ),
-    path(
-        'password_reset_complete',
-        views.PasswordResetComplete,
+        'reset/complete',
+        views.PasswordResetComplete.as_view(),
         name='password_reset_complete'
     ),
     path(
-        'password_reset_confirm',
-        views.PasswordResetConfirm,
+        'reset/<uidb64>/<token>/',
+        views.PasswordResetConfirm.as_view(),
         name='password_reset_confirm'
-    )
+    ),
+    path(
+        'reset/done',
+        views.PasswordResetDoneView.as_view(),
+        name='password_reset_done'
+    ),
 ]
