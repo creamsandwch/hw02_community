@@ -48,17 +48,17 @@ urlpatterns = [
     ),
 
     path(
-        'reset/complete',
+        'reset/complete/',
         views.PasswordResetComplete.as_view(),
         name='password_reset_complete'
     ),
     path(
         'reset/<uidb64>/<token>/',
         views.PasswordResetConfirm.as_view(),
-        name='password_reset_confirm'
+        name='password_reset_confirm',
     ),
     path(
-        'reset/done',
+        'reset/done/',
         views.PasswordResetDoneView.as_view(),
         name='password_reset_done'
     ),
