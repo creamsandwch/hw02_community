@@ -10,7 +10,11 @@
           <div class="col-md-8 p-5">
             <div class="card">
               <div class="card-header">       
-                Новый пост             
+                {% if is_edit is True %}
+                Редактировать запись
+                {% else %}
+                Добавить запись         
+                {% endif %}    
               </div>
               <div class="card-body">        
                 <form method="post" action="{% url 'posts:post_create'%}">
@@ -42,7 +46,11 @@
                   </div>
                   <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">
+                      {% if is_edit is True %}
+                      Редактировать
+                      {% else %}
                       Сохранить
+                      {% endif %}
                     </button>
                   </div>
                 </form>

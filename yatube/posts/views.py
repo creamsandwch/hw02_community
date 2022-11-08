@@ -76,11 +76,49 @@ def post_create(request):
         context = {
             'form': form,
             'group_list': group_list,
+            'is_edit': False,
         }
         return render(request, 'posts/create_post.html', context)
     form = PostForm()
     context = {
         'form': form,
         'group_list': group_list,
+        'is_edit': False,
     }
     return render(request, 'posts/create_post.html', context)
+
+
+def post_edit(request, post_id):
+    post = Post.objects.get(id=post_id)
+    group_list = Group.objects.all()
+
+    if request.user == post.author:
+        if request.method == 'POST':
+            form = PostForm(request.POST, instance=post)
+            context = {
+                'form': form,
+                'group_list': group_list,
+                'is_edit': True,
+            }
+            if form.is_valid():
+                form.save()
+                return redirect(
+                    reverse_lazy(
+                        'posts:post_detail',
+                        kwargs={'post_id': post_id}
+                    )
+                )
+            return render(request, 'posts/create_post.html', context)
+        form = PostForm(request.POST, instance=post)
+        context = {
+            'form': form,
+            'group_list': group_list,
+            'is_edit': True,
+        }
+        return render(request, 'posts/create_post.html', context)
+    return redirect(
+        reverse_lazy(
+            'posts:post_detail',
+            kwargs={'post_id': post_id}
+        )
+    )
