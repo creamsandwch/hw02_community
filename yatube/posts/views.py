@@ -1,7 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 
 from .models import Post, Group
+from .forms import PostForm
 
 
 def index(request):
@@ -54,3 +57,30 @@ def post_detail(request, post_id):
         'author_posts_count': author_posts_count,
     }
     return render(request, 'posts/post_detail.html', context)
+
+
+@login_required
+def post_create(request):
+    group_list = Group.objects.all()
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.instance.author = request.user
+            form.save()
+            return redirect(
+                reverse_lazy(
+                    'posts:profile',
+                    kwargs={'username': request.user.username},
+                )
+            )
+        context = {
+            'form': form,
+            'group_list': group_list,
+        }
+        return render(request, 'posts/create_post.html', context)
+    form = PostForm()
+    context = {
+        'form': form,
+        'group_list': group_list,
+    }
+    return render(request, 'posts/create_post.html', context)
