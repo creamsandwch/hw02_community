@@ -88,13 +88,13 @@ def post_create(request):
     return render(request, 'posts/create_post.html', context)
 
 
+@login_required
 def post_edit(request, post_id):
-    post = Post.objects.get(id=post_id)
+    edited_post = get_object_or_404(Post, id=post_id)
     group_list = Group.objects.all()
-
-    if request.user == post.author:
+    if request.user == edited_post.author:
         if request.method == 'POST':
-            form = PostForm(request.POST, instance=post)
+            form = PostForm(request.POST or None, instance=edited_post)
             context = {
                 'form': form,
                 'group_list': group_list,
@@ -109,7 +109,7 @@ def post_edit(request, post_id):
                     )
                 )
             return render(request, 'posts/create_post.html', context)
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST or None, instance=edited_post)
         context = {
             'form': form,
             'group_list': group_list,

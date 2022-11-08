@@ -17,27 +17,35 @@
                 {% endif %}    
               </div>
               <div class="card-body">        
-                <form method="post" action="{% url 'posts:post_create'%}">
+                {% if is_edit is True %}
+                <form method="post" action="{% url 'posts:post_edit' form.instance.id %}">
+                {% else %}
+                <form method="post" action="{% url 'posts:post_create' %}">
+                {% endif %}
                   {% csrf_token %}         
                   <div class="form-group row my-3 p-3">
                     <label for="id_text">
-                      Текст поста                  
+                      Текст поста             
                       <span class="required text-danger" >*</span>                  
                     </label>
                     <textarea name="text" cols="40" rows="10" class="form-control" required id="id_text">
                     </textarea>                
                     <small id="id_text-help" class="form-text text-muted">
-                      Текст нового поста
+                     {% if is_edit is True %}
+                     Текст редактируемого поста
+                     {% else %}
+                     Текст нового поста
+                     {% endif %}
                     </small>                  
                   </div>    
                   <div class="form-group row my-3 p-3">
                     <label for="id_group">
-                      Группа                  
+                      Группа                
                     </label>
                     <select name="group" class="form-control" id="id_group">
                       <option value="" selected>---------</option>
                       {% for group in group_list %}
-                      <option value="{{ group }}">{{ group.title }}</option>
+                      <option value="{{ group.id }}">{{ group.title }}</option>
                       {% endfor %}
                     </select>
                     <small id="id_group-help" class="form-text text-muted">
@@ -49,7 +57,7 @@
                       {% if is_edit is True %}
                       Редактировать
                       {% else %}
-                      Сохранить
+                      Добавить
                       {% endif %}
                     </button>
                   </div>
