@@ -104,8 +104,8 @@ def post_edit(request, post_id):
                 form.save()
                 return redirect(
                     reverse_lazy(
-                        'posts:post_detail',
-                        kwargs={'post_id': post_id}
+                        'posts:profile',
+                        kwargs={'username': request.user.username}
                     )
                 )
             return render(request, 'posts/create_post.html', context)
